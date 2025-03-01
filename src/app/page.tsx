@@ -6,15 +6,17 @@ import { getCharacters } from '@/services/api';
 import { CharactersResponse } from '@/types/api';
 import { Suspense } from 'react';
 
-interface HomePageProps {
-  searchParams: {
-    status?: string;
-    gender?: string;
-    page?: string;
-  };
+interface SearchParams {
+  status?: string;
+  gender?: string;
+  page?: string;
 }
 
-export default async function HomePage({ searchParams }: HomePageProps) {
+export default async function HomePage({
+  searchParams,
+}: {
+  searchParams: SearchParams | Promise<SearchParams>;
+}) {
   const params = await Promise.resolve(searchParams);
 
   const status = params.status === 'all' || !params.status ? '' : params.status;
