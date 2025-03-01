@@ -2,14 +2,14 @@
 
 import { Button } from '@/components/ui/button';
 import { useCharacterFilters } from '@/hooks/useCharacterFilters';
-import { motion } from 'framer-motion';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { memo } from 'react';
 
 interface PaginationProps {
   totalPages: number;
 }
 
-export function Pagination({ totalPages }: PaginationProps) {
+export const Pagination = memo(function Pagination({ totalPages }: PaginationProps) {
   const { filters, setPage } = useCharacterFilters({});
   const currentPage = filters.page;
 
@@ -75,14 +75,9 @@ export function Pagination({ totalPages }: PaginationProps) {
   };
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.3 }}
-      className="mt-12 flex flex-col items-center justify-center gap-4"
-    >
+    <div className="mt-12 flex flex-col items-center justify-center gap-4">
       <div className="text-center">
-        <span className="rounded-full border border-white/10 bg-white/5 px-4 py-1.5 text-sm font-medium text-white/80 backdrop-blur-sm">
+        <span className="rounded-full border border-white/10 bg-white/5 px-4 py-1.5 text-sm font-medium text-white/80">
           Toplam <span className="font-bold text-white">{totalPages}</span> sayfa
         </span>
       </div>
@@ -94,9 +89,9 @@ export function Pagination({ totalPages }: PaginationProps) {
           onClick={handlePrevious}
           disabled={currentPage === 1}
           aria-label="Önceki sayfa"
-          className="group h-9 w-9 rounded-full border-white/10 bg-black/40 text-white backdrop-blur-sm transition-all duration-300 hover:border-blue-400/30 hover:bg-blue-500/10 hover:shadow-[0_0_15px_rgba(59,130,246,0.3)] disabled:opacity-50"
+          className="h-9 w-9 rounded-full border-white/10 bg-black/40 text-white hover:border-blue-400/30 hover:bg-blue-500/10 disabled:opacity-50"
         >
-          <ChevronLeft className="h-4 w-4 transition-transform duration-300 group-hover:scale-125 group-hover:text-blue-400" />
+          <ChevronLeft className="h-4 w-4" />
         </Button>
 
         <div className="flex gap-1.5">
@@ -123,20 +118,13 @@ export function Pagination({ totalPages }: PaginationProps) {
                 onClick={() => handlePageClick(page as number)}
                 aria-label={`Sayfa ${page}`}
                 aria-current={currentPage === page ? 'page' : undefined}
-                className={`h-9 w-9 rounded-full transition-all duration-300 ${
+                className={`h-9 w-9 rounded-full ${
                   currentPage === page
-                    ? 'border-purple-400/30 bg-purple-500/20 text-white shadow-[0_0_15px_rgba(168,85,247,0.3)] hover:bg-purple-500/30'
-                    : 'border-white/10 bg-black/40 text-white backdrop-blur-sm hover:border-white/20 hover:bg-white/10'
+                    ? 'border-purple-400/30 bg-purple-500/20 text-white hover:bg-purple-500/30'
+                    : 'border-white/10 bg-black/40 text-white hover:border-white/20 hover:bg-white/10'
                 }`}
               >
-                <motion.span
-                  initial={{ scale: 1 }}
-                  animate={currentPage === page ? { scale: [1, 1.2, 1] } : { scale: 1 }}
-                  transition={{ duration: 0.3 }}
-                  className={currentPage === page ? 'font-bold' : ''}
-                >
-                  {page}
-                </motion.span>
+                <span className={currentPage === page ? 'font-bold' : ''}>{page}</span>
               </Button>
             );
           })}
@@ -148,11 +136,11 @@ export function Pagination({ totalPages }: PaginationProps) {
           onClick={handleNext}
           disabled={currentPage === totalPages}
           aria-label="Sonraki sayfa"
-          className="group h-9 w-9 rounded-full border-white/10 bg-black/40 text-white backdrop-blur-sm transition-all duration-300 hover:border-blue-400/30 hover:bg-blue-500/10 hover:shadow-[0_0_15px_rgba(59,130,246,0.3)] disabled:opacity-50"
+          className="h-9 w-9 rounded-full border-white/10 bg-black/40 text-white hover:border-blue-400/30 hover:bg-blue-500/10 disabled:opacity-50"
         >
-          <ChevronRight className="h-4 w-4 transition-transform duration-300 group-hover:scale-125 group-hover:text-blue-400" />
+          <ChevronRight className="h-4 w-4" />
         </Button>
       </div>
-    </motion.div>
+    </div>
   );
-}
+});

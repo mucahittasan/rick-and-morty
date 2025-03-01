@@ -1,0 +1,123 @@
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInScale {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes pulse {
+  0% {
+    opacity: 0.6;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0.6;
+  }
+}
+
+.fade-in {
+  animation: fadeIn 0.3s ease-out forwards;
+}
+
+.fade-in-scale {
+  animation: fadeInScale 0.3s ease-out forwards;
+}
+
+.pulse {
+  animation: pulse 2s infinite ease-in-out;
+}
+
+/* Staggered animations for grid items */
+.grid-item {
+  opacity: 0;
+  animation: fadeIn 0.5s ease-out forwards;
+}
+
+.grid-item:nth-child(1) {
+  animation-delay: 0.05s;
+}
+.grid-item:nth-child(2) {
+  animation-delay: 0.1s;
+}
+.grid-item:nth-child(3) {
+  animation-delay: 0.15s;
+}
+.grid-item:nth-child(4) {
+  animation-delay: 0.2s;
+}
+.grid-item:nth-child(5) {
+  animation-delay: 0.25s;
+}
+.grid-item:nth-child(6) {
+  animation-delay: 0.3s;
+}
+.grid-item:nth-child(7) {
+  animation-delay: 0.35s;
+}
+.grid-item:nth-child(8) {
+  animation-delay: 0.4s;
+}
+.grid-item:nth-child(9) {
+  animation-delay: 0.45s;
+}
+.grid-item:nth-child(10) {
+  animation-delay: 0.5s;
+}
+.grid-item:nth-child(11) {
+  animation-delay: 0.55s;
+}
+.grid-item:nth-child(12) {
+  animation-delay: 0.6s;
+}
+.grid-item:nth-child(13) {
+  animation-delay: 0.65s;
+}
+.grid-item:nth-child(14) {
+  animation-delay: 0.7s;
+}
+.grid-item:nth-child(15) {
+  animation-delay: 0.75s;
+}
+.grid-item:nth-child(16) {
+  animation-delay: 0.8s;
+}
+.grid-item:nth-child(17) {
+  animation-delay: 0.85s;
+}
+.grid-item:nth-child(18) {
+  animation-delay: 0.9s;
+}
+.grid-item:nth-child(19) {
+  animation-delay: 0.95s;
+}
+.grid-item:nth-child(20) {
+  animation-delay: 1s;
+}
+
+/* Hide scrollbar for Chrome, Safari and Opera */
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+/* Hide scrollbar for IE, Edge and Firefox */
+.scrollbar-hide {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
