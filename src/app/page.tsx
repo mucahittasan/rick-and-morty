@@ -12,12 +12,8 @@ interface SearchParams {
   page?: string;
 }
 
-export default async function HomePage({
-  searchParams,
-}: {
-  searchParams: SearchParams | Promise<SearchParams>;
-}) {
-  const params = await Promise.resolve(searchParams);
+export default async function HomePage({ searchParams }: { searchParams: Promise<SearchParams> }) {
+  const params = await searchParams;
 
   const status = params.status === 'all' || !params.status ? '' : params.status;
   const gender = params.gender === 'all' || !params.gender ? '' : params.gender;
