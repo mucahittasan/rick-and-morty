@@ -1,101 +1,85 @@
-import Image from "next/image";
+import { CharacterContainer } from '@/components/CharacterContainer';
+import { CharacterDetailModal } from '@/components/CharacterDetailModal';
+import { CharacterFilters } from '@/components/CharacterFilters';
+import { FavoritesButton } from '@/components/FavoritesButton';
+import { getCharacters } from '@/services/api';
+import { CharactersResponse } from '@/types/api';
+import { Suspense } from 'react';
 
-export default function Home() {
+interface HomePageProps {
+  searchParams: {
+    status?: string;
+    gender?: string;
+    page?: string;
+  };
+}
+
+export default async function HomePage({ searchParams }: HomePageProps) {
+  const params = await Promise.resolve(searchParams);
+
+  const status = params.status === 'all' || !params.status ? '' : params.status;
+  const gender = params.gender === 'all' || !params.gender ? '' : params.gender;
+  const page = parseInt(params.page || '1', 10);
+
+  let charactersData: CharactersResponse;
+
+  try {
+    charactersData = await getCharacters({
+      status: status as 'alive' | 'dead' | 'unknown' | '',
+      gender: gender as 'female' | 'male' | 'genderless' | 'unknown' | '',
+      page,
+    });
+  } catch (error) {
+    console.error('Error fetching characters:', error);
+    charactersData = {
+      info: { count: 0, pages: 0, next: null, prev: null },
+      results: [],
+    };
+  }
+
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+    <main className="relative min-h-screen bg-black/90 px-4 py-8">
+      <div className="pointer-events-none fixed inset-0 -z-10 bg-[url('/noise.png')] opacity-[0.02] mix-blend-overlay"></div>
+      <div className="pointer-events-none fixed -top-40 -right-40 -z-10 h-96 w-96 rounded-full bg-purple-500/5 blur-3xl"></div>
+      <div className="pointer-events-none fixed -bottom-40 -left-40 -z-10 h-96 w-96 rounded-full bg-blue-500/5 blur-3xl"></div>
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+      <div className="container mx-auto">
+        <div className="relative mb-16 overflow-hidden rounded-2xl border border-white/10 bg-black/40 p-8 shadow-[0_8px_32px_rgba(0,0,0,0.3)] backdrop-blur-xl">
+          <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-white/10 via-transparent to-white/10"></div>
+
+          <div className="absolute -top-24 -right-24 h-64 w-64 rounded-full bg-purple-500/20 blur-3xl"></div>
+          <div className="absolute -bottom-24 -left-24 h-64 w-64 rounded-full bg-blue-500/20 blur-3xl"></div>
+
+          <header className="relative z-10 text-center">
+            <h1 className="mb-4 bg-gradient-to-r from-green-400 via-blue-500 to-purple-600 bg-clip-text text-5xl font-extrabold tracking-tight text-transparent drop-shadow-[0_0_10px_rgba(139,92,246,0.3)] sm:text-6xl">
+              Rick and Morty Keşif
+            </h1>
+            <p className="mx-auto max-w-2xl text-lg font-medium text-white/80">
+              Rick and Morty evrenindeki karakterleri keşfedin, favorilerinizi kaydedin ve detaylı
+              bilgilere ulaşın
+            </p>
+            <div className="absolute top-0 right-0 sm:right-4">
+              <FavoritesButton />
+            </div>
+          </header>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
+
+        <section className="mb-8 overflow-hidden rounded-2xl border border-white/10 bg-black/40 p-1 shadow-[0_8px_32px_rgba(0,0,0,0.3)] backdrop-blur-xl">
+          <CharacterFilters />
+        </section>
+
+        <Suspense
+          fallback={
+            <div className="flex h-64 items-center justify-center">
+              <div className="h-12 w-12 animate-spin rounded-full border-4 border-purple-500 border-t-transparent shadow-[0_0_15px_rgba(168,85,247,0.5)]"></div>
+            </div>
+          }
         >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
+          <CharacterContainer initialData={charactersData} />
+        </Suspense>
+
+        <CharacterDetailModal />
+      </div>
+    </main>
   );
 }
