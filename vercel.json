@@ -1,5 +1,8 @@
 {
   "buildCommand": "npm run build",
-  "installCommand": "npm install",
-  "framework": "nextjs"
+  "installCommand": "npm install --no-package-lock --ignore-scripts",
+  "framework": "nextjs",
+  "env": {
+    "HUSKY": "0"
+  }
 }
